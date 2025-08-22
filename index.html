@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satiro Comercial - E-commerce de Mercado</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1><i class="fas fa-store"></i> Satiro Comercial</h1>
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#produtos">Produtos</a></li>
+                    <li><a href="#sobre">Sobre</a></li>
+                    <li><a href="#contato">Contato</a></li>
+                </ul>
+            </nav>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h2>Bem-vindo ao Satiro Comercial</h2>
+                    <p>Seu mercado online com os melhores produtos e preços</p>
+                    <button class="btn-primary" onclick="scrollToProducts()">Ver Produtos</button>
+                </div>
+            </section>
+
+            <!-- Products Section -->
+            <section id="produtos" class="products">
+                <h2>Nossos Produtos</h2>
+                <div class="products-grid" id="productsGrid">
+                    <!-- Products will be loaded here -->
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="sobre" class="about">
+                <h2>Sobre o Satiro Comercial</h2>
+                <p>Somos uma empresa comprometida em oferecer produtos de qualidade com preços justos. Nossa missão é facilitar suas compras do dia a dia com entrega rápida e atendimento personalizado.</p>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contato" class="contact">
+                <h2>Entre em Contato</h2>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <p>(11) 99999-9999</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <p>contato@satirocomercial.com</p>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <p>Rua das Flores, 123 - São Paulo, SP</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Shopping Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Carrinho de Compras</h3>
+            <button class="close-cart" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be displayed here -->
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <strong>Total: R$ <span id="cartTotal">0,00</span></strong>
+            </div>
+            <div class="cart-actions">
+                <button class="btn-secondary" onclick="clearCart()">Esvaziar Carrinho</button>
+                <button class="btn-primary" onclick="checkout()" id="checkoutBtn" disabled>Finalizar Compra</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- Checkout Modal -->
+    <div class="modal" id="checkoutModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Finalizar Compra</h3>
+                <button class="close-modal" onclick="closeCheckoutModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="checkoutForm" class="checkout-form">
+                <div class="form-group">
+                    <label for="customerName">Nome Completo:</label>
+                    <input type="text" id="customerName" name="customerName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerEmail">E-mail:</label>
+                    <input type="email" id="customerEmail" name="customerEmail" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="customerPhone">Telefone:</label>
+                    <input type="tel" id="customerPhone" name="customerPhone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="paymentType">Tipo de Pagamento:</label>
+                    <select id="paymentType" name="paymentType" required onchange="togglePaymentFields()">
+                        <option value="">Selecione o tipo</option>
+                        <option value="credit">Cartão de Crédito</option>
+                        <option value="debit">Cartão de Débito</option>
+                        <option value="bank">Conta Corrente</option>
+                    </select>
+                </div>
+                
+                <!-- Campos para cartão de crédito/débito -->
+                <div id="cardFields" class="payment-fields">
+                <div class="form-group">
+                    <label for="cardNumber">Número do Cartão:</label>
+                        <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="23">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="cardExpiry">Data de Vencimento:</label>
+                            <input type="month" id="cardExpiry" name="cardExpiry">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cardCvv">CVV:</label>
+                            <input type="text" id="cardCvv" name="cardCvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="cardName">Nome no Cartão:</label>
+                        <input type="text" id="cardName" name="cardName" maxlength="50">
+                    </div>
+                </div>
+                
+                <!-- Campos para conta corrente -->
+                <div id="bankFields" class="payment-fields" style="display: none;">
+                    <div class="form-group">
+                        <label for="bankName">Nome do Banco:</label>
+                        <input type="text" id="bankName" name="bankName" placeholder="Ex: Banco do Brasil" maxlength="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bankAgency">Agência:</label>
+                        <input type="text" id="bankAgency" name="bankAgency" placeholder="0000" maxlength="10">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bankAccount">Número da Conta:</label>
+                        <input type="text" id="bankAccount" name="bankAccount" placeholder="12345-6" maxlength="15">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="accountHolder">Titular da Conta:</label>
+                        <input type="text" id="accountHolder" name="accountHolder" placeholder="Nome completo do titular" maxlength="50">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="cpfCnpj">CPF/CNPJ:</label>
+                        <input type="text" id="cpfCnpj" name="cpfCnpj" placeholder="000.000.000-00" maxlength="18">
+                    </div>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" onclick="closeCheckoutModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Confirmar Pagamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal">
+        <div class="modal-content success">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> Compra Realizada com Sucesso!</h3>
+            </div>
+            <div class="modal-body">
+                <p>Seu pedido foi processado com sucesso!</p>
+                <p>Você receberá uma confirmação por SMS em breve.</p>
+                <p>Obrigado por escolher o Satiro Comercial!</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-primary" onclick="closeSuccessModal()">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Satiro Comercial. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+
+    <script>
+        // Adicionando restrição para que o campo de vencimento aceite apenas números
+        document.getElementById('cardExpiry').addEventListener('input', function(e) {
+            let value = e.target.value;
+            // Substitui qualquer caractere que não seja número
+            value = value.replace(/\D/g, '');
+            // Formata para o formato MM-YYYY
+            if (value.length > 2 && value.length <= 4) {
+                value = value.slice(0, 2) + '-' + value.slice(2);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html>
